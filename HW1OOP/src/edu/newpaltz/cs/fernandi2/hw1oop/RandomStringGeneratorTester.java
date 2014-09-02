@@ -9,7 +9,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 public class RandomStringGeneratorTester {
-
 	@SuppressWarnings("static-access")
 	public static Options createOptions() {
 		Options opt = new Options();

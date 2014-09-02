@@ -19,10 +19,19 @@ public class RandomStringGenerator {
 		this.rand = new Random();
 	}
 	
+	/**
+	 * Return a random index for the ranges list
+	 * @return A random index number
+	 */
 	private int getRangeIndex(){
 		return this.rand.nextInt(this.ranges.size());
 	}
 	
+	/**
+	 * Generate a random string with the specified size
+	 * @param size The size of the generated string
+	 * @return The random string
+	 */
 	public String nextString(int size){
 		char[] string = new char[size];
 		
@@ -33,10 +42,23 @@ public class RandomStringGenerator {
 		return new String(string);
 	}
 	
+	/**
+	 * Add a range of characters on the generator
+	 * @param range The range of characters to be added.
+	 */
 	public void addRange(Range range){
 		this.ranges.add(range);
 	}
 	
+	/**
+	 * Generate a random string based on a specified seed.
+	 * The seed is a string containers c, C or d characters, each one representing what type of character should be generated.
+	 * The 'c' character means that the letter should be lower-case, the 'C' means upper-case and 'd' means that it should 
+	 * be a digit
+	 * @param seed The seed string made of 'c', 'C' or 'd' characters
+	 * @return The generated random string based on the seed
+	 * @throws Exception Raises when the seed contains characters other then the ones specified above
+	 */
 	public String nextString(String seed) throws Exception{
 		char[] string = new char[seed.length()];
 		Range lower = new Range('a','z');
