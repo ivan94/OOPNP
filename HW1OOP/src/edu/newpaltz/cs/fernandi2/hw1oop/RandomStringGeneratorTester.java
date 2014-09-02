@@ -18,7 +18,7 @@ public class RandomStringGeneratorTester {
 				.withDescription("size of the generated string").create('i');
 
 		Option strOpt = OptionBuilder.withArgName("string").hasArg()
-				.withDescription("seed for the generated strings").create('s');
+				.withDescription("seed of characters \'c\', \'C\' and \'d\'for the generated strings").create('s');
 
 		opt.addOption(intOpt);
 		opt.addOption(strOpt);
@@ -61,7 +61,7 @@ public class RandomStringGeneratorTester {
 
 	private static void printHelp(Options o) {
 		HelpFormatter hf = new HelpFormatter();
-		hf.printHelp("java RandomStringGenerator", o, true);
+		hf.printHelp("RandomStringGenerator", o, true);
 	}
 
 }

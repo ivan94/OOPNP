@@ -3,18 +3,24 @@ package edu.newpaltz.cs.fernandi2.hw1oop;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Class that generate a random strings
+ * Given a list of ranges of characters the class is able to genereta a string of a given size or based on a seed
+ * @author Ivan Fernandes
+ *
+ */
 public class RandomStringGenerator {
 	private ArrayList<Range> ranges;
 	
 	private Random rand;
 	
 	public RandomStringGenerator(){
-		this.ranges = new ArrayList<>();
+		this.ranges = new ArrayList<Range>();
 		this.rand = new Random();
 	}
 	
 	private int getRangeIndex(){
-		return this.rand.nextInt(this.ranges.size()-1);
+		return this.rand.nextInt(this.ranges.size());
 	}
 	
 	public String nextString(int size){
