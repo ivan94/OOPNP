@@ -9,19 +9,18 @@ public class Inventory {
 	public static String ORANGE= "orange";
 	public static String SPRITE= "sprite";
 	public static String GINGER_ALE= "ginger ale";
-	public static String DIET_COLA= "cola";
-	private int selection = 0;
+	public static String DIET_COLA= "diet cola";	
 	
 	
 	private ArrayList<InventoryItem> contents = null;
 	
 	public Inventory() {
 		this.contents = new ArrayList<InventoryItem>();
-		this.contents.add(new InventoryItem(0, COLA, 0));
-		this.contents.add(new InventoryItem(1, ORANGE, 0));
-		this.contents.add(new InventoryItem(2, SPRITE, 0));
-		this.contents.add(new InventoryItem(3, GINGER_ALE, 0));
-		this.contents.add(new InventoryItem(4, DIET_COLA, 0));
+		this.contents.add(new InventoryItem(0, COLA, 3));
+		this.contents.add(new InventoryItem(1, ORANGE, 3));
+		this.contents.add(new InventoryItem(2, SPRITE, 3));
+		this.contents.add(new InventoryItem(3, GINGER_ALE, 3));
+		this.contents.add(new InventoryItem(4, DIET_COLA, 3));
 	}
 	
 	public void addToInventory(int id, int q ) {
@@ -36,6 +35,7 @@ public class Inventory {
 		StringBuilder bd = new StringBuilder();
 		for (InventoryItem inventoryItem : this.contents) {
 			bd.append(inventoryItem.toString());
+			bd.append("\n");
 		}
 		return bd.toString();
 	}
@@ -57,11 +57,13 @@ public class Inventory {
 	}
 	
 	private InventoryItem getItem(String i) {
-		int index = this.contents.indexOf(new InventoryItem(0, i, 0));
-		if(index >= 0)
-			return this.getItem(index);
-		else
-			return null;
+		InventoryItem result = null;
+		InventoryItem comparation = new InventoryItem(0, i, 0);
+		for(InventoryItem item : this.contents){
+			if(item.equals(comparation))
+				result = item;
+		}
+		return result;
 	}
 	
 	public boolean outOfStock(int itemID) {
