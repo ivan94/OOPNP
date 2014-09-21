@@ -1,7 +1,6 @@
 package edu.newpaltz.edu.cs.fernandi2.sodamachine;
 
 
-import java.util.*;
 
 public class InitTransaction extends Transaction{
 
