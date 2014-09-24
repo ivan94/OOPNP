@@ -33,9 +33,9 @@ public class ChangeMechanism {
 	public String toString() {
 		StringBuilder bd = new StringBuilder();
 		bd.append("CashBox: $");
-		bd.append(this.changeBox/100);
+		bd.append(this.changeBox / 100);
 		bd.append(".");
-		bd.append(String.format("%02d", this.changeBox%100));
+		bd.append(String.format("%02d", this.changeBox % 100));
 		return bd.toString();
 	}
 
@@ -47,15 +47,15 @@ public class ChangeMechanism {
 	 *            Accepts change into the change mechanism. If
 	 */
 	public void addChange(int c) {
-		if(c == 5 && this.cust_n < MAX_N){
+		if (c == 5 && this.cust_n < MAX_N) {
 			this.cust_n++;
-		}else if(c == 10 && this.cust_d < MAX_D){
+		} else if (c == 10 && this.cust_d < MAX_D) {
 			this.cust_d++;
-		}else if(c == 25 && this.cust_q < MAX_Q){
+		} else if (c == 25 && this.cust_q < MAX_Q) {
 			this.cust_q++;
-		}else if(c != 5 && c != 10 && c != 25){
+		} else if (c != 5 && c != 10 && c != 25) {
 			return;
-		}else{
+		} else {
 			this.changeBox += c;
 		}
 		this.amountEntered += c;
@@ -68,10 +68,33 @@ public class ChangeMechanism {
 	private String buildChangeString(int amountReturned) {
 		StringBuilder bd = new StringBuilder();
 		bd.append("Change: $");
-		bd.append(amountReturned/100);
+		bd.append(amountReturned / 100);
 		bd.append(".");
-		bd.append(String.format("%02d", amountReturned%100));
+		bd.append(String.format("%02d", amountReturned % 100));
 		return bd.toString();
+	}
+
+	public boolean hasChange(int cost) {
+		int amountReturned = this.amountEntered - cost;
+		if (amountReturned < 0)
+			return false;
+
+		int change = amountReturned;
+
+		if (change / 25 > 0) {
+			int mul = change / 25 <= this.cust_q ? change / 25 : this.cust_q;
+			change -= 25 * mul;
+		}
+		if (change / 10 > 0) {
+			int mul = change / 10 <= this.cust_d ? change / 10 : this.cust_d;
+			change -= 10 * mul;
+		}
+		if (change / 5 > 0) {
+			int mul = change / 5 <= this.cust_n ? change / 5 : this.cust_n;
+			change -= 5 * mul;
+		}
+
+		return change == 0;
 	}
 
 	/**
@@ -84,29 +107,28 @@ public class ChangeMechanism {
 	 */
 	public String getChange(int cost) {
 		int amountReturned = this.amountEntered - cost;
-		if(amountReturned < 0)
+		if (amountReturned < 0)
 			return null;
-		
+
 		int change = amountReturned;
-		
-		while(change > 0){
-			if(this.cust_q > 0 && change >= 25){
-				change -= 25;
-				this.cust_q--;
-			}else if(this.cust_d > 0 && change >= 10){
-				change -= 10;
-				this.cust_d--;
-			}else if(this.cust_n > 0 && change >= 5){
-				change -= 5;
-				this.cust_n--;
-			}else{
-				/*Do some error treatment*/
-				break;
-			}
+		if (change / 25 > 0) {
+			int mul = change / 25 <= this.cust_q ? change / 25 : this.cust_q;
+			change -= 25 * mul;
+			this.cust_q -= mul;
+		}
+		if (change / 10 > 0) {
+			int mul = change / 10 <= this.cust_d ? change / 10 : this.cust_d;
+			change -= 10 * mul;
+			this.cust_d -= mul;
+		}
+		if (change / 5 > 0) {
+			int mul = change / 5 <= this.cust_n ? change / 5 : this.cust_n;
+			change -= 5 * mul;
+			this.cust_n -= mul;
 		}
 		this.amountEntered = 0;
-		
-		return this.buildChangeString(amountReturned);
+
+		return this.buildChangeString(amountReturned - change);
 	}
 
 	public int getAmountEntered() {

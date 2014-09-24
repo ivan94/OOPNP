@@ -25,11 +25,16 @@ public class SodaMachine {
 					this.changeMechanism.getAmountEntered())) {
 				if (!this.inventory.outOfStock(itemId)) { // successfull
 															// transaction
-					System.out.println(this.inventory.getSelection(itemId));
-					System.out
-							.println(this.changeMechanism
-									.getChange(this.inventory
-											.getSelectionCost(itemId)));
+					if(this.changeMechanism.hasChange(this.inventory.getSelectionCost(itemId))){
+						System.out.println(this.inventory.getSelection(itemId));
+						System.out
+								.println(this.changeMechanism
+										.getChange(this.inventory
+												.getSelectionCost(itemId)));
+					}else{ // MACHINE WITHOUT CHANGE
+						System.out.println("Machine without change");
+						System.out.println(this.changeMechanism.getChange(0));
+					}
 				} else {// OUT OF STOCK
 					System.out.println("Item out of stock");
 					System.out.println(this.changeMechanism.getChange(0));
