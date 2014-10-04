@@ -9,6 +9,7 @@ public class SelectTransaction extends Transaction {
 	
 
 	public void entry() {
+		super.entry();
 	}
 	
 	public void run() {

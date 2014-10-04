@@ -50,6 +50,7 @@ public class SodaMachine {
 				System.out.println(bd);
 				System.out.println(this.changeMechanism.getChange(0));
 			}
+			System.out.println();
 		}
 	}
 
@@ -122,6 +123,7 @@ public class SodaMachine {
 
 	public void removeMachineReceipts() {
 		System.out.println(this.changeMechanism.emptyCashBox());
+		System.out.println();
 	}
 
 	public void addToInventory(String s) {
@@ -135,7 +137,7 @@ public class SodaMachine {
 		SodaMachine sm = new SodaMachine();
 		sm.addTransactions();
 
-		transaction = transactions.get(Transaction.INIT_TID);
+		sm.advanceTransaction(Transaction.INIT_TID);
 		while (true) {
 			SodaMachine.transaction.run();
 		}

@@ -15,6 +15,7 @@ public class AdminTransaction extends Transaction {
 	}
 
 	public void entry() {
+		super.entry();
 		System.out.println("Welcome admin");
 	}
 

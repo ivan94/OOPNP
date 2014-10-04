@@ -52,7 +52,9 @@ public class Transaction {
 	
 	public void entry() {
 		System.out.println("Entering "+ name);
+		System.out.print("Legal inputs: ");
 		displayLegalInputs();
+		System.out.println();
 	}
 	
 	public void run() {}

@@ -10,6 +10,7 @@ public class InitTransaction extends Transaction{
 	}
 	
 	public void entry() {
+		super.entry();
 	}
 	
 	public void run() {

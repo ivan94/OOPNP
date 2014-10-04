@@ -17,6 +17,7 @@ public class InputTransaction extends Transaction {
 	}
 
 	public void entry() {
+		super.entry();
 		System.out.println("Insert coins and select a soda");
 	}
 

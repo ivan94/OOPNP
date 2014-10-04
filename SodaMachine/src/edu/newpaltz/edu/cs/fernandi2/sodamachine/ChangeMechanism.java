@@ -1,10 +1,12 @@
 package edu.newpaltz.edu.cs.fernandi2.sodamachine;
 
+import java.util.ArrayList;
+
 public class ChangeMechanism {
 	private int cust_q = 0, cust_d = 0, cust_n = 0;
-	private final int MAX_Q = 3;
-	private final int MAX_D = 3;
-	private final int MAX_N = 3;
+	private final int MAX_Q = 20;
+	private final int MAX_D = 20;
+	private final int MAX_N = 20;
 	private int changeBox = 0;
 	private int amountEntered = 0;
 
@@ -17,9 +19,9 @@ public class ChangeMechanism {
 	}
 
 	public void init() {
-		this.cust_q = 0;
-		this.cust_d = 0;
-		this.cust_n = 0;
+		this.cust_q = MAX_Q;
+		this.cust_d = MAX_D;
+		this.cust_n = MAX_N;
 		this.changeBox = 0;
 		this.amountEntered = 0;
 	}
@@ -67,7 +69,7 @@ public class ChangeMechanism {
 
 	private String buildChangeString(int amountReturned) {
 		StringBuilder bd = new StringBuilder();
-		bd.append("Change: $");
+		bd.append("Returning: $");
 		bd.append(amountReturned / 100);
 		bd.append(".");
 		bd.append(String.format("%02d", amountReturned % 100));
@@ -79,22 +81,19 @@ public class ChangeMechanism {
 		if (amountReturned < 0)
 			return false;
 
-		int change = amountReturned;
-
-		if (change / 25 > 0) {
-			int mul = change / 25 <= this.cust_q ? change / 25 : this.cust_q;
-			change -= 25 * mul;
-		}
-		if (change / 10 > 0) {
-			int mul = change / 10 <= this.cust_d ? change / 10 : this.cust_d;
-			change -= 10 * mul;
-		}
-		if (change / 5 > 0) {
-			int mul = change / 5 <= this.cust_n ? change / 5 : this.cust_n;
-			change -= 5 * mul;
+		int change = 0;
+		ArrayList<Integer> changes = this.possibleChanges(amountReturned);
+		for (int i = 0; i < changes.size(); i += 3) {
+			if (changes.get(i) <= this.cust_q
+					&& changes.get(i + 1) <= this.cust_d
+					&& changes.get(i + 2) <= this.cust_n) {
+				change = 25 * changes.get(i) + 10 * changes.get(i + 1) + 5
+						* changes.get(i + 2);
+				break;
+			}
 		}
 
-		return change == 0;
+		return change == amountReturned;
 	}
 
 	/**
@@ -110,29 +109,55 @@ public class ChangeMechanism {
 		if (amountReturned < 0)
 			return null;
 
-		int change = amountReturned;
-		if (change / 25 > 0) {
-			int mul = change / 25 <= this.cust_q ? change / 25 : this.cust_q;
-			change -= 25 * mul;
-			this.cust_q -= mul;
+		int change = 0;
+		ArrayList<Integer> changes = this.possibleChanges(amountReturned);
+		for (int i = 0; i < changes.size(); i += 3) {
+			if (changes.get(i) <= this.cust_q
+					&& changes.get(i + 1) <= this.cust_d
+					&& changes.get(i + 2) <= this.cust_n) {
+				change = 25 * changes.get(i) + 10 * changes.get(i + 1) + 5
+						* changes.get(i + 2);
+				this.cust_q -= changes.get(i);
+				this.cust_d -= changes.get(i + 1);
+				this.cust_n -= changes.get(i + 2);
+				break;
+			}
 		}
-		if (change / 10 > 0) {
-			int mul = change / 10 <= this.cust_d ? change / 10 : this.cust_d;
-			change -= 10 * mul;
-			this.cust_d -= mul;
-		}
-		if (change / 5 > 0) {
-			int mul = change / 5 <= this.cust_n ? change / 5 : this.cust_n;
-			change -= 5 * mul;
-			this.cust_n -= mul;
-		}
+
 		this.amountEntered = 0;
 
-		return this.buildChangeString(amountReturned - change);
+		return this.buildChangeString(change);
 	}
 
 	public int getAmountEntered() {
 		return this.amountEntered;
+	}
+
+	/**
+	 * Get all possible combination of coins to reach the price
+	 * 
+	 * @param price
+	 *            the price to be reached
+	 * @return A list with all possible combinations. Each 3 elements on the
+	 *         list represents the necessary number of quarter dimes and nickels
+	 *         respectively
+	 */
+	private ArrayList<Integer> possibleChanges(int price) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+
+		int quarters = price / 25;
+
+		for (; quarters >= 0; quarters--) {
+			int dimes = (price - 25 * quarters) / 10;
+			for (; dimes >= 0; dimes--) {
+				int nickels = (price - 25 * quarters - 10 * dimes) / 5;
+				result.add(quarters);
+				result.add(dimes);
+				result.add(nickels);
+			}
+		}
+
+		return result;
 	}
 
 }
