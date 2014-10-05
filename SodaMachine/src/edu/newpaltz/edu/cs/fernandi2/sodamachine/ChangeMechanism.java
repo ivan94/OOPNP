@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class ChangeMechanism {
 	private int cust_q = 0, cust_d = 0, cust_n = 0;
-	private final int MAX_Q = 20;
-	private final int MAX_D = 20;
-	private final int MAX_N = 20;
+	private final int MAX_Q = 3;
+	private final int MAX_D = 3;
+	private final int MAX_N = 3;
 	private int changeBox = 0;
 	private int amountEntered = 0;
 
@@ -122,6 +122,11 @@ public class ChangeMechanism {
 				this.cust_n -= changes.get(i + 2);
 				break;
 			}
+		}
+		
+		if(change == 0){
+			change = 25*this.cust_q + 10*this.cust_d + 5*this.cust_n;
+			this.cust_q = this.cust_n = this.cust_d = 0;
 		}
 
 		this.amountEntered = 0;

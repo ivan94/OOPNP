@@ -84,11 +84,14 @@ public class MessageQueue{
 	private void growCapacity(){
 		Message[] oldQueue = elements;
 		elements = new Message[elements.length*GROW_SCALE];
+		int oldCount = count;
+		int oldHead = head;
 		count = 0;
 		head = 0;
 		tail = 0;
-		for(Message m: oldQueue){
-			this.add(m);
+		for(int i = 0; i < oldCount; i++){
+			int index = (oldHead + i) % oldQueue.length;
+			this.add(oldQueue[index]);
 		}
 	}
 	
