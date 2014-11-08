@@ -20,9 +20,11 @@ public class SceneComponent extends JComponent {
 
 	private ArrayList<SceneShape> shapes;
 	private Point mousePoint;
+	private SelectionShape selectS;
 
 	public SceneComponent() {
 		shapes = new ArrayList<SceneShape>();
+		selectS = null;
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -35,11 +37,19 @@ public class SceneComponent extends JComponent {
 						clicked = true;
 					}
 				}
-				if(!clicked){
+				if (!clicked) {
 					for (SceneShape s : shapes) {
 						s.setSelected(false);
 					}
+					selectS = new SelectionShape(mousePoint.getX(),
+							mousePoint.getY());
 				}
+				repaint();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				selectS = null;
 				repaint();
 			}
 		});
@@ -49,11 +59,24 @@ public class SceneComponent extends JComponent {
 			public void mouseDragged(MouseEvent e) {
 				Point lastMousePoint = mousePoint;
 				mousePoint = e.getPoint();
-				for (SceneShape s : shapes) {
-					if(s.isSelected()){
-						double dx = mousePoint.getX() - lastMousePoint.getX();
-						double dy = mousePoint.getY() - lastMousePoint.getY();
-						s.translate((int)dx, (int)dy);
+				if (selectS == null) {
+					for (SceneShape s : shapes) {
+						if (s.isSelected()) {
+							double dx = mousePoint.getX()
+									- lastMousePoint.getX();
+							double dy = mousePoint.getY()
+									- lastMousePoint.getY();
+							s.translate((int) dx, (int) dy);
+						}
+					}
+				} else {
+					selectS.setCorner(mousePoint.getX(), mousePoint.getY());
+					for (SceneShape s : shapes) {
+						if (selectS.contains(s.getSelectionArea())) {
+							s.setSelected(true);
+						} else {
+							s.setSelected(false);
+						}
 					}
 				}
 				repaint();
@@ -83,12 +106,16 @@ public class SceneComponent extends JComponent {
 		}
 		repaint();
 	}
+
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		for (SceneShape s : shapes) {
 			s.draw(g2);
 			if (s.isSelected())
 				s.drawSelection(g2);
+		}
+		if(selectS != null){
+			selectS.draw(g2);
 		}
 	}
 }

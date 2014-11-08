@@ -4,10 +4,15 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 
 public class CarShape extends CompoundShape {
-
+	private int x, y, width;
+		
 	public CarShape(int x, int y, int width) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
 		Rectangle2D.Double body = new Rectangle2D.Double(x, y + width / 6,
 				width - 1, width / 6);
 		Ellipse2D.Double frontTire = new Ellipse2D.Double(x + width / 6, y
@@ -34,6 +39,18 @@ public class CarShape extends CompoundShape {
 		add(frontWindshield);
 		add(roofTop);
 		add(rearWindshield);
+	}
+
+	@Override
+	public Double getSelectionArea() {
+		return new Rectangle2D.Double(x, y, width-1, width/2);
+	}
+	
+	@Override
+	public void translate(int dx, int dy) {
+		x += dx;
+		y += dy;
+		super.translate(dx, dy);
 	}
 
 }
